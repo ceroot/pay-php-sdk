@@ -1,0 +1,18 @@
+{
+  "type": "libray",
+  "name": "zoujingli/think-alipay",
+  "homepage": "https://github.com/zoujingli/think-alipay",
+  "description": "AliPay development of SDK",
+  "license": "MIT",
+  "keywords": [
+    "think-alipay"
+  ],
+  "require": {
+    "php": ">=5.3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "alipay\\": "./src"
+    }
+  }
+}
