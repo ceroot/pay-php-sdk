@@ -1,0 +1,239 @@
+<?php
+
+namespace Pay\Gateways\Wechat;
+
+use Pay\Contracts\Config;
+use Pay\Contracts\GatewayInterface;
+use Pay\Exceptions\GatewayException;
+use Pay\Exceptions\InvalidArgumentException;
+
+abstract class Wechat implements GatewayInterface
+{
+
+    /**
+     * @var string
+     */
+    protected $gateway = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+
+    /**
+     * @var string
+     */
+    protected $gateway_query = 'https://api.mch.weixin.qq.com/pay/orderquery';
+
+    /**
+     * @var string
+     */
+    protected $gateway_close = 'https://api.mch.weixin.qq.com/pay/closeorder';
+
+    /**
+     * @var string
+     */
+    protected $gateway_refund = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
+
+    /**
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * @var Config
+     */
+    protected $userConfig;
+
+    /**
+     * Wechat constructor.
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->userConfig = new Config($config);
+        $this->config = [
+            'appid'      => $this->userConfig->get('app_id', ''),
+            'mch_id'     => $this->userConfig->get('mch_id', ''),
+            'nonce_str'  => $this->createNonceStr(),
+            'sign_type'  => 'MD5',
+            'notify_url' => $this->userConfig->get('notify_url', ''),
+            'trade_type' => $this->getTradeType(),
+        ];
+    }
+
+    /**
+     * @param array $options
+     * @return mixed
+     */
+    abstract public function apply(array $options);
+
+    /**
+     * refund.
+     *
+     * @author yansongda <me@yansongda.cn>
+     *
+     * @param array $options
+     * @return array
+     */
+    public function refund($options = [])
+    {
+        $this->config = array_merge($this->config, $options);
+        $this->config['op_user_id'] = isset($this->config['op_user_id']) ?: $this->userConfig->get('mch_id', '');
+        $this->unsetTradeTypeAndNotifyUrl();
+        return $this->getResult($this->gateway_refund, true);
+    }
+
+    /**
+     * @param string $out_trade_no
+     * @return array
+     */
+    public function close($out_trade_no = '')
+    {
+        $this->config['out_trade_no'] = $out_trade_no;
+        $this->unsetTradeTypeAndNotifyUrl();
+        return $this->getResult($this->gateway_close);
+    }
+
+    /**
+     * @param string $out_trade_no
+     * @return array
+     */
+    public function find($out_trade_no = '')
+    {
+        $this->config['out_trade_no'] = $out_trade_no;
+        $this->unsetTradeTypeAndNotifyUrl();
+        return $this->getResult($this->gateway_query);
+    }
+
+    /**
+     * @param array $data
+     * @param null $sign
+     * @param bool $sync
+     * @return array|bool
+     */
+    public function verify($data, $sign = null, $sync = false)
+    {
+        $data = $this->fromXml($data);
+        $sign = is_null($sign) ? $data['sign'] : $sign;
+        return $this->getSign($data) === $sign ? $data : false;
+    }
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getTradeType();
+
+    /**
+     * @param array $config_biz
+     * @return array
+     */
+    protected function preOrder($config_biz = [])
+    {
+        $this->config = array_merge($this->config, $config_biz);
+        return $this->getResult($this->gateway);
+    }
+
+    /**
+     * @param $end_point
+     * @param bool $cert
+     * @return array
+     * @throws GatewayException
+     */
+    protected function getResult($end_point, $cert = false)
+    {
+        $this->config['sign'] = $this->getSign($this->config);
+        if ($cert) {
+            $data = $this->fromXml($this->post($end_point, $this->toXml($this->config), ['cert' => $this->userConfig->get('cert_client', ''), 'ssl_key' => $this->userConfig->get('cert_key', '')]));
+        } else {
+            $data = $this->fromXml($this->post($end_point, $this->toXml($this->config)));
+        }
+        if (!isset($data['return_code']) || $data['return_code'] !== 'SUCCESS' || $data['result_code'] !== 'SUCCESS') {
+            $error = 'getResult error:' . $data['return_msg'];
+            $error .= isset($data['err_code_des']) ? ' - ' . $data['err_code_des'] : '';
+        }
+        if (!isset($error) && $this->getSign($data) !== $data['sign']) {
+            $error = 'getResult error: return data sign error';
+        }
+        if (isset($error)) {
+            throw new GatewayException($error, 20000, $data);
+        }
+        return $data;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    protected function getSign($data)
+    {
+        if (is_null($this->userConfig->get('key'))) {
+            throw new InvalidArgumentException('Missing Config -- [key]');
+        }
+        ksort($data);
+        $string = md5($this->getSignContent($data) . '&key=' . $this->userConfig->get('key'));
+        return strtoupper($string);
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    protected function getSignContent($data)
+    {
+        $buff = '';
+        foreach ($data as $k => $v) {
+            $buff .= ($k != 'sign' && $v != '' && !is_array($v)) ? $k . '=' . $v . '&' : '';
+        }
+        return trim($buff, '&');
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     */
+    protected function createNonceStr($length = 16)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $str = '';
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    protected function toXml($data)
+    {
+        if (!is_array($data) || count($data) <= 0) {
+            throw new InvalidArgumentException('convert to xml error!invalid array!');
+        }
+        $xml = '<xml>';
+        foreach ($data as $key => $val) {
+            $xml .= is_numeric($val) ? '<' . $key . '>' . $val . '</' . $key . '>' : '<' . $key . '><![CDATA[' . $val . ']]></' . $key . '>';
+        }
+        $xml .= '</xml>';
+        return $xml;
+    }
+
+    /**
+     * @param $xml
+     * @return mixed
+     */
+    protected function fromXml($xml)
+    {
+        if (!$xml) {
+            throw new InvalidArgumentException('convert to array error !invalid xml');
+        }
+        libxml_disable_entity_loader(true);
+        return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA), JSON_UNESCAPED_UNICODE), true);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function unsetTradeTypeAndNotifyUrl()
+    {
+        unset($this->config['notify_url']);
+        unset($this->config['trade_type']);
+        return true;
+    }
+}
