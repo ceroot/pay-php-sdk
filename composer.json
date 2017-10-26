@@ -1,11 +1,11 @@
 {
   "type": "libray",
-  "name": "zoujingli/think-alipay",
-  "homepage": "https://github.com/zoujingli/think-alipay",
-  "description": "AliPay development of SDK",
+  "name": "zoujingli/pay-php-sdk",
+  "homepage": "https://github.com/zoujingli/pay-php-sdk",
+  "description": "pay development of SDK",
   "license": "MIT",
   "keywords": [
-    "think-alipay"
+    "pay-php-sdk"
   ],
   "require": {
     "php": ">=5.3.3"
