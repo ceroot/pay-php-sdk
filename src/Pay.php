@@ -71,8 +71,7 @@ class Pay
         if (!isset($this->drivers)) {
             throw new InvalidArgumentException('Driver is not defined.');
         }
-        $this->gateways = $this->createGateway($gateway);
-        return $this->gateways;
+        return $this->gateways = $this->createGateway($gateway);
     }
 
     /**
