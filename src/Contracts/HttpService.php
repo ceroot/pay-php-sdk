@@ -55,7 +55,7 @@ class HttpService
     protected static function request($method, $url, $options = [])
     {
         $curl = curl_init();
-        // GET数据设置
+        // GET参数设置
         if (!empty($options['query'])) {
             $url .= stripos($url, '?') !== false ? '&' : '?' . http_build_query($options['query']);
         }
@@ -83,7 +83,7 @@ class HttpService
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        list($content, $status) = array(curl_exec($curl), curl_getinfo($curl), curl_close($curl));
+        list($content, $status) = [curl_exec($curl), curl_getinfo($curl), curl_close($curl)];
         return (intval($status["http_code"]) === 200) ? $content : false;
     }
 
@@ -100,7 +100,9 @@ class HttpService
         foreach ($data as $key => $value) {
             if (is_string($value) && class_exists('CURLFile', false) && stripos($value, '@') === 0) {
                 $filename = realpath(trim($value, '@'));
-                file_exists($filename) && $data[$key] = new \CURLFile($filename);
+                if ($filename && file_exists($filename)) {
+                    $data[$key] = new \CURLFile($filename);
+                }
             }
         }
         return $data;
