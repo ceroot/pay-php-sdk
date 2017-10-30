@@ -13,7 +13,7 @@
 namespace Pay\Exceptions;
 
 /**
- * 支付网关异常处理类
+ * 支付网关异常类
  * Class GatewayException
  * @package Pay\Exceptions
  */

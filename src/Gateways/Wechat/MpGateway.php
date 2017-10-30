@@ -22,6 +22,7 @@ use Pay\Exceptions\InvalidArgumentException;
 class MpGateway extends Wechat
 {
     /**
+     * 当前操作类型
      * @return string
      */
     protected function getTradeType()
@@ -30,6 +31,7 @@ class MpGateway extends Wechat
     }
 
     /**
+     * 设置并返回参数
      * @param array $options
      * @return array
      */

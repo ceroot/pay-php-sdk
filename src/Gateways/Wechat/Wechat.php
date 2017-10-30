@@ -1,5 +1,15 @@
 <?php
 
+// +----------------------------------------------------------------------
+// | pay-php-sdk
+// +----------------------------------------------------------------------
+// | 版权所有 2014~2017 广州楚才信息科技有限公司 [ http://www.cuci.cc ]
+// +----------------------------------------------------------------------
+// | 开源协议 ( https://mit-license.org )
+// +----------------------------------------------------------------------
+// | github开源项目：https://github.com/zoujingli/pay-php-sdk
+// +----------------------------------------------------------------------
+
 namespace Pay\Gateways\Wechat;
 
 use Pay\Contracts\Config;
@@ -7,8 +17,23 @@ use Pay\Contracts\GatewayInterface;
 use Pay\Exceptions\GatewayException;
 use Pay\Exceptions\InvalidArgumentException;
 
-abstract class Wechat implements GatewayInterface
+/**
+ * 微信支付基础类
+ * Class Wechat
+ * @package Pay\Gateways\Wechat
+ */
+abstract class Wechat extends GatewayInterface
 {
+
+    /**
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * @var Config
+     */
+    protected $userConfig;
 
     /**
      * @var string
@@ -31,16 +56,6 @@ abstract class Wechat implements GatewayInterface
     protected $gateway_refund = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
 
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var Config
-     */
-    protected $userConfig;
-
-    /**
      * Wechat constructor.
      * @param array $config
      */
@@ -56,12 +71,6 @@ abstract class Wechat implements GatewayInterface
             'trade_type' => $this->getTradeType(),
         ];
     }
-
-    /**
-     * @param array $options
-     * @return mixed
-     */
-    abstract public function apply(array $options);
 
     /**
      * refund.
@@ -130,18 +139,22 @@ abstract class Wechat implements GatewayInterface
     }
 
     /**
-     * @param $end_point
+     * 获取验证访问数据
+     * @param string $url
      * @param bool $cert
      * @return array
      * @throws GatewayException
      */
-    protected function getResult($end_point, $cert = false)
+    protected function getResult($url, $cert = false)
     {
         $this->config['sign'] = $this->getSign($this->config);
         if ($cert) {
-            $data = $this->fromXml($this->post($end_point, $this->toXml($this->config), ['cert' => $this->userConfig->get('cert_client', ''), 'ssl_key' => $this->userConfig->get('cert_key', '')]));
+            $data = $this->fromXml($this->post(
+                $url, $this->toXml($this->config),
+                ['ssl_cer' => $this->userConfig->get('ssl_cer', ''), 'ssl_key' => $this->userConfig->get('ssl_key', '')]
+            ));
         } else {
-            $data = $this->fromXml($this->post($end_point, $this->toXml($this->config)));
+            $data = $this->fromXml($this->post($url, $this->toXml($this->config)));
         }
         if (!isset($data['return_code']) || $data['return_code'] !== 'SUCCESS' || $data['result_code'] !== 'SUCCESS') {
             $error = 'getResult error:' . $data['return_msg'];
@@ -156,25 +169,28 @@ abstract class Wechat implements GatewayInterface
         return $data;
     }
 
+
     /**
+     * 生成内容签名
      * @param $data
      * @return string
      */
     protected function getSign($data)
     {
-        if (is_null($this->userConfig->get('key'))) {
-            throw new InvalidArgumentException('Missing Config -- [key]');
+        if (is_null($this->userConfig->get('partnerkey'))) {
+            throw new InvalidArgumentException('Missing Config -- [partnerkey]');
         }
         ksort($data);
-        $string = md5($this->getSignContent($data) . '&key=' . $this->userConfig->get('key'));
+        $string = md5($this->getSignContent($data) . '&key=' . $this->userConfig->get('partnerkey'));
         return strtoupper($string);
     }
 
     /**
+     * 生成签名内容
      * @param $data
      * @return string
      */
-    protected function getSignContent($data)
+    private function getSignContent($data)
     {
         $buff = '';
         foreach ($data as $k => $v) {
@@ -184,6 +200,7 @@ abstract class Wechat implements GatewayInterface
     }
 
     /**
+     * 生成随机字符串
      * @param int $length
      * @return string
      */
@@ -198,7 +215,8 @@ abstract class Wechat implements GatewayInterface
     }
 
     /**
-     * @param $data
+     * 转为XML数据
+     * @param array $data 源数据
      * @return string
      */
     protected function toXml($data)
@@ -210,12 +228,12 @@ abstract class Wechat implements GatewayInterface
         foreach ($data as $key => $val) {
             $xml .= is_numeric($val) ? '<' . $key . '>' . $val . '</' . $key . '>' : '<' . $key . '><![CDATA[' . $val . ']]></' . $key . '>';
         }
-        $xml .= '</xml>';
-        return $xml;
+        return $xml . '</xml>';
     }
 
     /**
-     * @param $xml
+     * 解析XML数据
+     * @param string $xml 源数据
      * @return mixed
      */
     protected function fromXml($xml)
@@ -228,6 +246,7 @@ abstract class Wechat implements GatewayInterface
     }
 
     /**
+     * 清理签名验证不必要的参数
      * @return bool
      */
     protected function unsetTradeTypeAndNotifyUrl()

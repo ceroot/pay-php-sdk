@@ -17,35 +17,35 @@ namespace Pay\Contracts;
  * Interface GatewayInterface
  * @package Pay\Contracts
  */
-interface GatewayInterface
+abstract class GatewayInterface
 {
     /**
      * 发起支付
      * @param array $options
      * @return mixed
      */
-    public function apply(array $options);
+    abstract public function apply(array $options);
 
     /**
      * 订单退款
      * @param $options
      * @return mixed
      */
-    public function refund($options);
+    abstract public function refund($options);
 
     /**
      * 关闭订单
      * @param $options
      * @return mixed
      */
-    public function close($options);
+    abstract public function close($options);
 
     /**
      * 查询订单
      * @param $out_trade_no
      * @return mixed
      */
-    public function find($out_trade_no);
+    abstract public function find($out_trade_no);
 
     /**
      * 通知验证
@@ -54,5 +54,17 @@ interface GatewayInterface
      * @param bool $sync
      * @return mixed
      */
-    public function verify($data, $sign = null, $sync = false);
+    abstract public function verify($data, $sign = null, $sync = false);
+
+    /**
+     * 网络模拟请求
+     * @param string $url 网络请求URL
+     * @param array|string $data 请求数据
+     * @param array $options
+     * @return bool|string
+     */
+    public function post($url, $data, $options = [])
+    {
+        return HttpService::post($url, $data, $options);
+    }
 }

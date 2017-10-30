@@ -15,6 +15,7 @@ namespace Pay\Gateways\Wechat;
 use Pay\Exceptions\InvalidArgumentException;
 
 /**
+ * 微信扫码支付网关
  * Class ScanGateway
  * @package Pay\Gateways\Wechat
  */
@@ -22,6 +23,7 @@ class ScanGateway extends Wechat
 {
 
     /**
+     * 当前操作类型
      * @return string
      */
     protected function getTradeType()
@@ -30,6 +32,7 @@ class ScanGateway extends Wechat
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return mixed
      */

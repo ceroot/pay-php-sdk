@@ -22,14 +22,8 @@ use Pay\Exceptions\GatewayException;
  * Class Alipay
  * @package Pay\Gateways\Alipay
  */
-abstract class Alipay implements GatewayInterface
+abstract class Alipay extends GatewayInterface
 {
-
-    /**
-     * 支付宝网关地址
-     * @var string
-     */
-    protected $gateway = 'https://openapi.alipay.com/gateway.do?charset=utf-8';
 
     /**
      * 支付宝全局参数
@@ -42,6 +36,12 @@ abstract class Alipay implements GatewayInterface
      * @var Config
      */
     protected $userConfig;
+
+    /**
+     * 支付宝网关地址
+     * @var string
+     */
+    protected $gateway = 'https://openapi.alipay.com/gateway.do?charset=utf-8';
 
     /**
      * Alipay constructor.
@@ -68,6 +68,11 @@ abstract class Alipay implements GatewayInterface
         ];
     }
 
+    /**
+     * 应用参数
+     * @param array $options
+     * @return mixed|void
+     */
     public function apply(array $options)
     {
         $options['product_code'] = $this->getProductCode();
@@ -77,8 +82,9 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
-     * @param $options
-     * @param null $refund_amount
+     * 支付宝订单退款操作
+     * @param array|string $options 退款参数或退款商户订单号
+     * @param null $refund_amount 退款金额
      * @return array|bool
      */
     public function refund($options, $refund_amount = null)
@@ -90,6 +96,7 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
+     * 关闭支付宝进行中的订单
      * @param $options
      * @return array|bool
      */
@@ -102,6 +109,7 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
+     * 查询支付宝订单状态
      * @param string $out_trade_no
      * @return array|bool
      */
@@ -112,8 +120,9 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
-     * @param array $data
-     * @param null $sign
+     * 验证支付宝支付宝通知
+     * @param array $data 通知数据
+     * @param null $sign 数据签名
      * @param bool $sync
      * @return array|bool
      */
@@ -156,6 +165,7 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
+     * 获取验证访问数据
      * @param array $options
      * @param string $method
      * @return array|bool
@@ -175,6 +185,7 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
+     * 获取数据签名
      * @return string
      */
     protected function getSign()
@@ -190,6 +201,7 @@ abstract class Alipay implements GatewayInterface
     }
 
     /**
+     * 数据签名处理
      * @param array $toBeSigned
      * @param bool $verify
      * @return bool|string

@@ -15,12 +15,15 @@ namespace Pay\Gateways\Wechat;
 use Pay\Exceptions\InvalidArgumentException;
 
 /**
+ * 微信小程序支付网关
  * Class MiniappGateway
  * @package Pay\Gateways\Wechat
  */
 class MiniappGateway extends Wechat
 {
+
     /**
+     * 当前操作类型
      * @return string
      */
     protected function getTradeType()
@@ -29,6 +32,7 @@ class MiniappGateway extends Wechat
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return array
      */

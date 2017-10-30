@@ -15,17 +15,20 @@ namespace Pay\Gateways\Wechat;
 use Pay\Exceptions\InvalidArgumentException;
 
 /**
+ * 微信POS刷卡支付网关
  * Class PosGateway
  * @package Pay\Gateways\Wechat
  */
 class PosGateway extends Wechat
 {
     /**
+     * 接口地址
      * @var string
      */
     protected $gateway = 'https://api.mch.weixin.qq.com/pay/micropay';
 
     /**
+     * 当前操作类型
      * @return string
      */
     protected function getTradeType()
@@ -34,6 +37,7 @@ class PosGateway extends Wechat
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return array
      */

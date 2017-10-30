@@ -19,7 +19,9 @@ namespace Pay\Gateways\Alipay;
  */
 class AppGateway extends Alipay
 {
+
     /**
+     * 当前接口方法
      * @return string
      */
     protected function getMethod()
@@ -28,6 +30,7 @@ class AppGateway extends Alipay
     }
 
     /**
+     * 当前接口产品码
      * @return string
      */
     protected function getProductCode()
@@ -36,6 +39,7 @@ class AppGateway extends Alipay
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return string
      */

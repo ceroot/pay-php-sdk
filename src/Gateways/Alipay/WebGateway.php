@@ -12,9 +12,16 @@
 
 namespace Pay\Gateways\Alipay;
 
+/**
+ * 支付宝网站支付网关
+ * Class WebGateway
+ * @package Pay\Gateways\Alipay
+ */
 class WebGateway extends Alipay
 {
+
     /**
+     * 当前接口方法
      * @return string
      */
     protected function getMethod()
@@ -23,6 +30,7 @@ class WebGateway extends Alipay
     }
 
     /**
+     * 当前接口产品码
      * @return string
      */
     protected function getProductCode()
@@ -31,6 +39,7 @@ class WebGateway extends Alipay
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return string
      */

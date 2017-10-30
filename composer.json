@@ -2,7 +2,7 @@
   "type": "libray",
   "name": "zoujingli/pay-php-sdk",
   "homepage": "https://github.com/zoujingli/pay-php-sdk",
-  "description": "pay development of SDK",
+  "description": "WxPay and AlirPay development of SDK",
   "license": "MIT",
   "keywords": [
     "pay-php-sdk"

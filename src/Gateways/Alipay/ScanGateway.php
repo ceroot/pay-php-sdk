@@ -13,6 +13,7 @@
 namespace Pay\Gateways\Alipay;
 
 /**
+ * 支付宝扫码支付
  * Class ScanGateway
  * @package Pay\Gateways\Alipay
  */
@@ -20,6 +21,7 @@ class ScanGateway extends Alipay
 {
 
     /**
+     * 当前接口方法
      * @return string
      */
     protected function getMethod()
@@ -28,6 +30,7 @@ class ScanGateway extends Alipay
     }
 
     /**
+     * 当前接口产品码
      * @return string
      */
     protected function getProductCode()
@@ -36,6 +39,7 @@ class ScanGateway extends Alipay
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return array|bool
      */

@@ -48,6 +48,7 @@ class Pay
     }
 
     /**
+     * 指定驱动器
      * @param string $driver
      * @return $this
      */
@@ -61,6 +62,7 @@ class Pay
     }
 
     /**
+     * 指定操作网关
      * @param string $gateway
      * @return GatewayInterface
      */
@@ -74,7 +76,8 @@ class Pay
     }
 
     /**
-     * @param $gateway
+     * 创建操作网关
+     * @param string $gateway
      * @return mixed
      */
     protected function createGateway($gateway)
@@ -83,15 +86,7 @@ class Pay
             throw new InvalidArgumentException("Gateway [$gateway] is not supported.");
         }
         $gateway = __NAMESPACE__ . '\\Gateways\\' . ucfirst($this->drivers) . '\\' . ucfirst($gateway) . 'Gateway';
-        return $this->build($gateway);
-    }
-
-    /**
-     * @param $gateway
-     * @return mixed
-     */
-    protected function build($gateway)
-    {
         return new $gateway($this->config->get($this->drivers));
     }
+
 }

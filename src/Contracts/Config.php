@@ -62,8 +62,9 @@ class Config implements ArrayAccess
     }
 
     /**
-     * @param $key
-     * @param $value
+     * 设置配置选项
+     * @param string $key
+     * @param string $value
      * @return array
      */
     public function set($key, $value)

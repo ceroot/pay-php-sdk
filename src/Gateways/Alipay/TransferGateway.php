@@ -21,6 +21,7 @@ class TransferGateway extends Alipay
 {
 
     /**
+     * 当前接口方法
      * @return string
      */
     protected function getMethod()
@@ -29,6 +30,7 @@ class TransferGateway extends Alipay
     }
 
     /**
+     * 当前接口产品码
      * @return string
      */
     protected function getProductCode()
@@ -37,6 +39,7 @@ class TransferGateway extends Alipay
     }
 
     /**
+     * 应用并返回参数
      * @param array $options
      * @return array|bool
      */

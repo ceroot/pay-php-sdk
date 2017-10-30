@@ -13,7 +13,7 @@
 namespace Pay\Exceptions;
 
 /**
- * 支付异常处理类
+ * 支付异常类
  * Class Exception
  * @package Pay\Exceptions
  */
