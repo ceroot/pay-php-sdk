@@ -154,7 +154,7 @@ abstract class Alipay extends GatewayInterface
      */
     protected function buildPayHtml()
     {
-        $sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='" . $this->gateway . "' method='POST'>";
+        $sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='{$this->gateway}' method='POST'>";
         while (list($key, $val) = each($this->config)) {
             $val = str_replace("'", '&apos;', $val);
             $sHtml .= "<input type='hidden' name='" . $key . "' value='" . $val . "'/>";
@@ -179,7 +179,7 @@ abstract class Alipay extends GatewayInterface
         $method = str_replace('.', '_', $method) . '_response';
         $data = json_decode($this->post($this->gateway, $this->config), true);
         if (!isset($data[$method]['code']) || $data[$method]['code'] !== '10000') {
-            throw new GatewayException('get result error:' . $data[$method]['msg'] . ' - ' . $data[$method]['sub_code'], $data[$method]['code'], $data);
+            throw new GatewayException('GetResultError:' . $data[$method]['msg'] . ' - ' . $data[$method]['sub_code'], $data[$method]['code'], $data);
         }
         return $this->verify($data[$method], $data['sign'], true);
     }
