@@ -73,10 +73,7 @@ abstract class Wechat extends GatewayInterface
     }
 
     /**
-     * refund.
-     *
-     * @author yansongda <me@yansongda.cn>
-     *
+     * 订单退款操作
      * @param array $options
      * @return array
      */
@@ -89,6 +86,7 @@ abstract class Wechat extends GatewayInterface
     }
 
     /**
+     * 关闭正在进行的订单
      * @param string $out_trade_no
      * @return array
      */
@@ -100,6 +98,7 @@ abstract class Wechat extends GatewayInterface
     }
 
     /**
+     * 查询订单状态
      * @param string $out_trade_no
      * @return array
      */
