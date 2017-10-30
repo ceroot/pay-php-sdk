@@ -177,11 +177,11 @@ abstract class Wechat extends GatewayInterface
      */
     protected function getSign($data)
     {
-        if (is_null($this->userConfig->get('partnerkey'))) {
-            throw new InvalidArgumentException('Missing Config -- [partnerkey]');
+        if (is_null($this->userConfig->get('mch_key'))) {
+            throw new InvalidArgumentException('Missing Config -- [mch_key]');
         }
         ksort($data);
-        $string = md5($this->getSignContent($data) . '&key=' . $this->userConfig->get('partnerkey'));
+        $string = md5($this->getSignContent($data) . '&key=' . $this->userConfig->get('mch_key'));
         return strtoupper($string);
     }
 
