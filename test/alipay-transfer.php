@@ -18,13 +18,20 @@ $config = require(__DIR__ . '/config.php');
 // 实例支付对象
 $pay = new \Pay\Pay($config);
 
-if ($pay->driver('alipay')->gateway()->verify($_POST)) {
-    file_put_contents('notify.txt', "收到来自支付宝的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', '订单号：' . $_POST['out_trade_no'] . "\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', '订单金额：' . $_POST['total_amount'] . "\r\n\r\n", FILE_APPEND);
-} else {
-    file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
-}
+$payOrder = [
+    'out_biz_no'      => '',                      // 订单号
+    'payee_type'      => 'ALIPAY_LOGONID',        // 收款方账户类型(ALIPAY_LOGONID | ALIPAY_USERID)
+    'payee_account'   => 'demo@sandbox.com',   // 收款方账户
+    'amount'          => '10',                        // 转账金额
+    'payer_show_name' => '未寒',             // 付款方姓名
+    'payee_real_name' => '张三',             // 收款方真实姓名
+    'remark'          => '张三',                      // 转账备注
+];
 
-echo "success";
+try {
+    $options = $pay->driver('alipay')->gateway('transfer')->apply($payOrder);
+    var_dump($options);
+} catch (Exception $e) {
+    echo "创建订单失败，" . $e->getMessage();
+}
 
