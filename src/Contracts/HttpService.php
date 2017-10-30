@@ -97,12 +97,10 @@ class HttpService
         if (!is_array($data)) {
             return $data;
         }
-        foreach ($data as &$value) {
-            if (is_string($value) && class_exists('CURLFile', false) && $value[0] === '@') {
+        foreach ($data as $key => $value) {
+            if (is_string($value) && class_exists('CURLFile', false) && stripos($value, '@') === 0) {
                 $filename = realpath(trim($value, '@'));
-                if (file_exists($filename)) {
-                    $value = new \CURLFile($filename);
-                }
+                file_exists($filename) && $data[$key] = new \CURLFile($filename);
             }
         }
         return $data;
