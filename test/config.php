@@ -25,6 +25,6 @@ return [
         'app_id'      => '', // 应用ID
         'public_key'  => '', // 支付宝公钥(1行填写)
         'private_key' => '', // 支付宝私钥(1行填写)
-        'notify_url'  => '', // 支付通知URL
+        'notify_url'  => 'http://localhost/alipay-notify.php', // 支付通知URL
     ]
 ];
