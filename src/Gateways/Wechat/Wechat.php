@@ -111,7 +111,8 @@ abstract class Wechat extends GatewayInterface
     }
 
     /**
-     * @param array $data
+     * XML内容验证
+     * @param string $data
      * @param null $sign
      * @param bool $sync
      * @return array|bool
