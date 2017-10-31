@@ -27,7 +27,7 @@ PHP聚合支付SDK（微信支付 + 支付宝支付）
 - PHP 5.3+
 - composer
 
-## 配置参数
+## 配置
 ```php
 $config = [
     // 微信支付参数
@@ -49,7 +49,7 @@ $config = [
 ];
 ```
 
-## 支付网关
+## 架构
 
 由于各支付网关参差不齐，所以我们抽象了两个方法 `driver()`，`gateway()`。
 
@@ -87,7 +87,7 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 | wechat | app     | APP 支付  |
 | wechat | transfer     | 企业付款  |
 
-## 通用操作方法
+## 操作
 
 所有网关均支持以下方法
 
@@ -116,7 +116,7 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 参数：`$data` 为服务器接收到的原始内容，`$sign` 为签名信息，当其为空时，系统将自动转化 `$data` 为数组，然后取 `$data['sign']`。  
 返回：mixed  验证成功，返回 服务器返回的数组；否则返回 false；  
 
-## 平台及网关实现
+## 实例
 ```php
 // 实例支付对象
 $pay = new \Pay\Pay($config);
@@ -129,30 +129,30 @@ try {
 }
 ```
 
-## 通知处理
+## 通知
 
-#### 支付宝通知
+#### 支付宝
 ```php
 // 实例支付对象
 $pay = new \Pay\Pay($config);
 
 if ($pay->driver('alipay')->gateway()->verify($_POST)) {
     file_put_contents('notify.txt', "收到来自支付宝的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', "订单号：{$_POST['out_trade_no']}\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', "订单单号：{$_POST['out_trade_no']}\r\n", FILE_APPEND);
     file_put_contents('notify.txt', "订单金额：{$_POST['total_amount']}\r\n\r\n", FILE_APPEND);
 } else {
     file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
 }
 ```
 
-#### 微信通知
+#### 微信
 ```php
 $pay = new \Pay\Pay($config);
 $verify = $pay->driver('wechat')->gateway('mp')->verify(file_get_contents('php://input'));
 
 if ($verify) {
     file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', "订单号：{$verify['out_trade_no']}\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', "订单单号：{$verify['out_trade_no']}\r\n", FILE_APPEND);
     file_put_contents('notify.txt', "订单金额：{$verify['total_fee']}\r\n\r\n", FILE_APPEND);
 } else {
     file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
@@ -161,7 +161,7 @@ if ($verify) {
 echo "success";
 ```
 
-## SDK安装
+## 安装
 ```shell
 // 方法一、 使用composer安装
 composer require zoujingli/pay-php-sdk
