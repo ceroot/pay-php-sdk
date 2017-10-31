@@ -144,9 +144,9 @@ try {
 }
 ```
 
-## 支付通知处理
+## 通知处理
 
-### 支付宝通知处理
+#### 支付宝通知
 ```php
 // 实例支付对象
 $pay = new \Pay\Pay($config);
@@ -160,7 +160,7 @@ if ($pay->driver('alipay')->gateway()->verify($_POST)) {
 }
 ```
 
-### 微信支付通知处理
+#### 微信通知
 ```php
 $pay = new \Pay\Pay($config);
 $verify = $pay->driver('wechat')->gateway('mp')->verify(file_get_contents('php://input'));
