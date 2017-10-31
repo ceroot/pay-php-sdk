@@ -50,6 +50,7 @@ class TransferGateway extends Wechat
         }
         $options['mchid'] = $this->config['mch_id'];
         $options['mch_appid'] = $this->userConfig->get('app_id');
+        unset($this->config['appid']);
         unset($this->config['mch_id']);
         unset($this->config['sign_type']);
         unset($this->config['trade_type']);
