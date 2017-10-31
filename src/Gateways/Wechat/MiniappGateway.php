@@ -38,13 +38,13 @@ class MiniappGateway extends Wechat
      */
     public function apply(array $options = [])
     {
-        if (is_null($this->userConfig->get('miniapp_id'))) {
-            throw new InvalidArgumentException('Missing Config -- [miniapp_id]');
+        if (is_null($this->userConfig->get('app_id'))) {
+            throw new InvalidArgumentException('Missing Config -- [app_id]');
         }
-        $this->config['appid'] = $this->userConfig->get('miniapp_id');
+        $this->config['appid'] = $this->userConfig->get('app_id');
         $payRequest = [
-            'appId'     => $this->userConfig->get('miniapp_id'),
-            'timeStamp' => time(),
+            'appId'     => $this->config['appid'],
+            'timeStamp' => time() . '',
             'nonceStr'  => $this->createNonceStr(),
             'package'   => 'prepay_id=' . $this->preOrder($options)['prepay_id'],
             'signType'  => 'MD5',

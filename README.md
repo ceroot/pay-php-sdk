@@ -1,15 +1,17 @@
 # pay-php-sdk
 PHP聚合支付SDK（微信支付 + 支付宝支付）
 
-[![Latest Stable Version](https://poser.pugx.org/zoujingli/pay-php-sdk/v/stable)](https://packagist.org/packages/zoujingli/pay-php-sdk)
-[![Total Downloads](https://poser.pugx.org/zoujingli/pay-php-sdk/downloads)](https://packagist.org/packages/zoujingli/pay-php-sdk)
-[![Latest Unstable Version](https://poser.pugx.org/zoujingli/pay-php-sdk/v/unstable)](https://packagist.org/packages/zoujingli/pay-php-sdk)
-[![License](https://poser.pugx.org/zoujingli/pay-php-sdk/license)](https://packagist.org/packages/zoujingli/pay-php-sdk)
+<p>
+<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/stable" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/downloads" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/unstable" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/license" alt="License"></a>
+</p>
 
 欢迎 Star，欢迎 Fork！
 
 ## 特点
-- 代码简洁，无需加载多余组件，可应用于任何平台或框架
+- 代码简洁，无需加载多余组件，可应用与任何平台或框架
 - 隐藏开发者不需要关注的细节，完全内部实现
 - 根据支付宝、微信最新 API 开发集成
 - 高度抽象的类，免去各种拼json与xml的痛苦
@@ -21,44 +23,28 @@ PHP聚合支付SDK（微信支付 + 支付宝支付）
 - 代码与框架部分参考于互联网开源项目
 - SDK全部源码基于MIT协议开源，完全免费
 
-## 环境
+## 运行环境
 - PHP 5.3+
 - composer
 
-## 配置
-```php
-$config = [
-    // 微信支付参数
-    'wechat' => [
-        'app_id'     => '', // 应用ID
-        'mch_id'     => '', // 微信支付商户号
-        'mch_key'    => '', // 微信支付密钥
-        'ssl_cer'    => '', // 微信证书 cert 文件
-        'ssl_key'    => '', // 微信证书 key 文件
-        'notify_url' => '', // 支付通知URL
-    ],
-    // 支付宝支付参数
-    'alipay' => [
-        'app_id'      => '', // 应用ID
-        'public_key'  => '', // 支付宝公钥(1行填写)
-        'private_key' => '', // 支付宝私钥(1行填写)
-        'notify_url'  => '', // 支付通知URL
-    ]
-];
-```
-
-## 架构
+## 支付网关
 
 由于各支付网关参差不齐，所以我们抽象了两个方法 `driver()`，`gateway()`。
 
 两个方法的作用如下：
 
 `driver()` ： 确定支付平台，如 `alipay`,`wechat`;  
-`gateway()`： 确定支付网关，如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
+`gateway()`： 确定支付网关。如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
 
 具体实现可以查看源代码。
 
 ### 1、支付宝
+
+- 电脑支付
+- 手机网站支付
+- APP 支付
+- 刷卡支付
+- 扫码支付
 
 SDK 中对应的 driver 和 gateway 如下表所示：  
 
@@ -73,6 +59,13 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 
 ### 2、微信
 
+- 公众号支付
+- 小程序支付
+- H5 支付
+- 扫码支付
+- 刷卡支付
+- APP 支付
+
 SDK 中对应的 driver 和 gateway 如下表所示：
 
 | driver | gateway |   描述     |
@@ -85,7 +78,7 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 | wechat | app     | APP 支付  |
 | wechat | transfer     | 企业付款  |
 
-## 操作
+## 通用操作方法
 
 所有网关均支持以下方法
 
@@ -114,52 +107,8 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 参数：`$data` 为服务器接收到的原始内容，`$sign` 为签名信息，当其为空时，系统将自动转化 `$data` 为数组，然后取 `$data['sign']`。  
 返回：mixed  验证成功，返回 服务器返回的数组；否则返回 false；  
 
-## 实例
-```php
-// 实例支付对象
-$pay = new \Pay\Pay($config);
 
-try {
-    $options = $pay->driver('alipay')->gateway('app')->apply($payOrder);
-    var_dump($options);
-} catch (Exception $e) {
-    echo "创建订单失败，" . $e->getMessage();
-}
-```
-
-## 通知
-
-#### 支付宝
-```php
-// 实例支付对象
-$pay = new \Pay\Pay($config);
-
-if ($pay->driver('alipay')->gateway()->verify($_POST)) {
-    file_put_contents('notify.txt', "收到来自支付宝的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', "订单单号：{$_POST['out_trade_no']}\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', "订单金额：{$_POST['total_amount']}\r\n\r\n", FILE_APPEND);
-} else {
-    file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
-}
-```
-
-#### 微信
-```php
-$pay = new \Pay\Pay($config);
-$verify = $pay->driver('wechat')->gateway('mp')->verify(file_get_contents('php://input'));
-
-if ($verify) {
-    file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', "订单单号：{$verify['out_trade_no']}\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', "订单金额：{$verify['total_fee']}\r\n\r\n", FILE_APPEND);
-} else {
-    file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
-}
-
-echo "success";
-```
-
-## 安装
+## SDK安装
 ```shell
 // 方法一、 使用composer安装
 composer require zoujingli/pay-php-sdk

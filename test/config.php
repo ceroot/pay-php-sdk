@@ -10,7 +10,7 @@
 // | github开源项目：https://github.com/zoujingli/pay-php-sdk
 // +----------------------------------------------------------------------
 
-$config = [
+return [
     // 微信支付参数
     'wechat' => [
         'app_id'     => 'wxe335431b79068046', // 应用ID

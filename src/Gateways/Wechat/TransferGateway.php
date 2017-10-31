@@ -48,8 +48,8 @@ class TransferGateway extends Wechat
         if (is_null($this->userConfig->get('app_id'))) {
             throw new InvalidArgumentException('Missing Config -- [app_id]');
         }
-        $options['mch_appid'] = $this->config['app_id'];
         $options['mchid'] = $this->config['mch_id'];
+        $options['mch_appid'] = $this->userConfig->get('app_id');
         unset($this->config['mch_id']);
         unset($this->config['sign_type']);
         unset($this->config['trade_type']);
@@ -62,7 +62,7 @@ class TransferGateway extends Wechat
             ['ssl_cer' => $this->userConfig->get('ssl_cer', ''), 'ssl_key' => $this->userConfig->get('ssl_key', '')]
         ));
         if (!isset($data['return_code']) || $data['return_code'] !== 'SUCCESS' || $data['result_code'] !== 'SUCCESS') {
-            $error = 'GetResult error:' . $data['return_msg'];
+            $error = 'GetResultError:' . $data['return_msg'];
             $error .= isset($data['err_code_des']) ? ' - ' . $data['err_code_des'] : '';
         }
         if (isset($error)) {
