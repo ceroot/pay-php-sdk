@@ -149,10 +149,7 @@ abstract class Wechat extends GatewayInterface
     {
         $this->config['sign'] = $this->getSign($this->config);
         if ($cert) {
-            $data = $this->fromXml($this->post(
-                $url, $this->toXml($this->config),
-                ['ssl_cer' => $this->userConfig->get('ssl_cer', ''), 'ssl_key' => $this->userConfig->get('ssl_key', '')]
-            ));
+            $data = $this->fromXml($this->post($url, $this->toXml($this->config), ['ssl_cer' => $this->userConfig->get('ssl_cer', ''), 'ssl_key' => $this->userConfig->get('ssl_key', '')]));
         } else {
             $data = $this->fromXml($this->post($url, $this->toXml($this->config)));
         }

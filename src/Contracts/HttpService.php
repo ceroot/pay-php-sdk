@@ -24,24 +24,26 @@ class HttpService
      * 以get访问模拟访问
      * @param string $url 访问URL
      * @param array $query GET数
-     * @param array $headers 请求头信息
+     * @param array $options
      * @return bool|string
      */
-    public static function get($url, $query = [], $headers = [])
+    public static function get($url, $query = [], $options = [])
     {
-        return self::request('get', $url, ['headers' => $headers, 'query' => $query, 'data' => []]);
+        $options['query'] = $query;
+        return self::request('get', $url, $options);
     }
 
     /**
      * 以post访问模拟访问
      * @param string $url 访问URL
      * @param array $data POST数据
-     * @param array $headers 请求头信息
+     * @param array $options
      * @return bool|string
      */
-    public static function post($url, $data = [], $headers = [])
+    public static function post($url, $data = [], $options = [])
     {
-        return self::request('post', $url, ['headers' => $headers, 'query' => [], 'data' => $data]);
+        $options['data'] = $data;
+        return self::request('post', $url, $options);
     }
 
 
