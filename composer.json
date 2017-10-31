@@ -5,10 +5,13 @@
   "description": "WxPay and AliPay development of SDK",
   "license": "MIT",
   "keywords": [
-    "pay-php-sdk"
+    "pay-php-sdk",
+    "alipay",
+    "wxpay"
   ],
   "require": {
-    "php": ">=5.3.3"
+    "php": ">=5.3.3",
+    "ext-curl": "*"
   },
   "autoload": {
     "psr-4": {
