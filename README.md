@@ -56,17 +56,11 @@ $config = [
 两个方法的作用如下：
 
 `driver()` ： 确定支付平台，如 `alipay`,`wechat`;  
-`gateway()`： 确定支付网关。如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
+`gateway()`： 确定支付网关，如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
 
 具体实现可以查看源代码。
 
 ### 1、支付宝
-
-- 电脑支付
-- 手机网站支付
-- APP 支付
-- 刷卡支付
-- 扫码支付
 
 SDK 中对应的 driver 和 gateway 如下表所示：  
 
@@ -80,13 +74,6 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 | alipay | transfer    | 帐户转账（可用于平台用户提现）  |
 
 ### 2、微信
-
-- 公众号支付
-- 小程序支付
-- H5 支付
-- 扫码支付
-- 刷卡支付
-- APP 支付
 
 SDK 中对应的 driver 和 gateway 如下表所示：
 
