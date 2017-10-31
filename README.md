@@ -78,7 +78,7 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 | wechat | app     | APP 支付  |
 | wechat | transfer     | 企业付款  |
 
-## 通用的方法
+## 通用的操作
 
 所有网关均支持以下方法
 
