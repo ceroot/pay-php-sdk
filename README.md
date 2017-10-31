@@ -27,6 +27,29 @@ PHP聚合支付SDK（微信支付 + 支付宝支付）
 - PHP 5.3+
 - composer
 
+
+## 配置参数
+```php
+$config = [
+    // 微信支付参数
+    'wechat' => [
+        'app_id'     => '', // 应用ID
+        'mch_id'     => '', // 微信支付商户号
+        'mch_key'    => '', // 微信支付密钥
+        'ssl_cer'    => '', // 微信证书 cert 文件
+        'ssl_key'    => '', // 微信证书 key 文件
+        'notify_url' => '', // 支付通知URL
+    ],
+    // 支付宝支付参数
+    'alipay' => [
+        'app_id'      => '', // 应用ID
+        'public_key'  => '', // 支付宝公钥(1行填写)
+        'private_key' => '', // 支付宝私钥(1行填写)
+        'notify_url'  => '', // 支付通知URL
+    ]
+];
+```
+
 ## 支付网关
 
 由于各支付网关参差不齐，所以我们抽象了两个方法 `driver()`，`gateway()`。
@@ -37,6 +60,7 @@ PHP聚合支付SDK（微信支付 + 支付宝支付）
 `gateway()`： 确定支付网关。如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
 
 具体实现可以查看源代码。
+
 
 ### 1、支付宝
 
@@ -107,6 +131,50 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 参数：`$data` 为服务器接收到的原始内容，`$sign` 为签名信息，当其为空时，系统将自动转化 `$data` 为数组，然后取 `$data['sign']`。  
 返回：mixed  验证成功，返回 服务器返回的数组；否则返回 false；  
 
+## 平台及网关实现
+```php
+// 实例支付对象
+$pay = new \Pay\Pay($config);
+
+try {
+    $options = $pay->driver('alipay')->gateway('app')->apply($payOrder);
+    var_dump($options);
+} catch (Exception $e) {
+    echo "创建订单失败，" . $e->getMessage();
+}
+```
+
+## 支付通知处理
+
+### 支付宝通知处理
+```php
+// 实例支付对象
+$pay = new \Pay\Pay($config);
+
+if ($pay->driver('alipay')->gateway()->verify($_POST)) {
+    file_put_contents('notify.txt', "收到来自支付宝的异步通知\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', '订单号：' . $_POST['out_trade_no'] . "\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', '订单金额：' . $_POST['total_amount'] . "\r\n\r\n", FILE_APPEND);
+} else {
+    file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
+}
+```
+
+### 微信支付通知处理
+```php
+$pay = new \Pay\Pay($config);
+$verify = $pay->driver('wechat')->gateway('mp')->verify(file_get_contents('php://input'));
+
+if ($verify) {
+    file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', '订单号：' . $verify['out_trade_no'] . "\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', '订单金额：' . $verify['total_fee'] . "\r\n\r\n", FILE_APPEND);
+} else {
+    file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
+}
+
+echo "success";
+```
 
 ## SDK安装
 ```shell
