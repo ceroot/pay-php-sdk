@@ -1,5 +1,5 @@
 # pay-php-sdk
-PHP聚合支付SDK（含微信 + 支付宝）
+PHP聚合支付SDK（微信支付 + 支付宝支付）
 
 <p>
 <a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/stable" alt="Latest Stable Version"></a>
@@ -74,7 +74,7 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 | wechat | app     | APP 支付  |
 | wechat | transfer     | 企业付款  |
 
-## 支持的方法
+## 通用的方法
 
 所有网关均支持以下方法
 
