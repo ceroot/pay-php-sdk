@@ -1,5 +1,5 @@
 {
-  "type": "libray",
+  "type": "library",
   "name": "zoujingli/pay-php-sdk",
   "homepage": "https://github.com/zoujingli/pay-php-sdk",
   "description": "WxPay and AliPay development of SDK",
