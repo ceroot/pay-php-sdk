@@ -27,7 +27,7 @@ PHP聚合支付SDK（微信支付 + 支付宝支付）
 - PHP 5.3+
 - composer
 
-## 支持的支付网关
+## 支付网关
 
 由于各支付网关参差不齐，所以我们抽象了两个方法 `driver()`，`gateway()`。
 
@@ -78,14 +78,14 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 | wechat | app     | APP 支付  |
 | wechat | transfer     | 企业付款  |
 
-## 通用的操作
+## 通用操作方法
 
 所有网关均支持以下方法
 
 - pay(array $options)  
 说明：支付接口  
 参数：数组类型，订单业务配置项，包含 订单号，订单金额等  
-返回：mixed  详情请看「支付网关配置说明与返回值」一节。 
+返回：mixed 详情请看「支付网关配置说明与返回值」一节。 
 
 - refund(array|string $options, $refund_amount = null)  
 说明：退款接口  
@@ -108,7 +108,11 @@ SDK 中对应的 driver 和 gateway 如下表所示：
 返回：mixed  验证成功，返回 服务器返回的数组；否则返回 false；  
 
 
-## 安装
+## SDK安装
 ```shell
+// 方法一、 使用composer安装
 composer require zoujingli/pay-php-sdk
+
+// 方法二、 直接加载支付SDK
+include 'init.php'
 ```
