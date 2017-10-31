@@ -153,8 +153,8 @@ $pay = new \Pay\Pay($config);
 
 if ($pay->driver('alipay')->gateway()->verify($_POST)) {
     file_put_contents('notify.txt', "收到来自支付宝的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', '订单号：' . $_POST['out_trade_no'] . "\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', '订单金额：' . $_POST['total_amount'] . "\r\n\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', "订单号：{$_POST['out_trade_no']}\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', "订单金额：{$_POST['total_amount']}\r\n\r\n", FILE_APPEND);
 } else {
     file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
 }
@@ -167,8 +167,8 @@ $verify = $pay->driver('wechat')->gateway('mp')->verify(file_get_contents('php:/
 
 if ($verify) {
     file_put_contents('notify.txt', "收到来自微信的异步通知\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', '订单号：' . $verify['out_trade_no'] . "\r\n", FILE_APPEND);
-    file_put_contents('notify.txt', '订单金额：' . $verify['total_fee'] . "\r\n\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', "订单号：{$verify['out_trade_no']}\r\n", FILE_APPEND);
+    file_put_contents('notify.txt', "订单金额：{$verify['total_fee']}\r\n\r\n", FILE_APPEND);
 } else {
     file_put_contents('notify.txt', "收到异步通知\r\n", FILE_APPEND);
 }
