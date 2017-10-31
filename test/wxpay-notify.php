@@ -10,14 +10,12 @@
 // | github开源项目：https://github.com/zoujingli/pay-php-sdk
 // +----------------------------------------------------------------------
 
-use Pay\Pay;
-
 include '../init.php';
 
 // 加载配置参数
 $config = require(__DIR__ . '/config.php');
 
-$pay = new Pay($config);
+$pay = new Pay\Pay($config);
 $verify = $pay->driver('wechat')->gateway('mp')->verify(file_get_contents('php://input'));
 
 if ($verify) {
