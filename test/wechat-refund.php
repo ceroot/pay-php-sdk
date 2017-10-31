@@ -18,21 +18,17 @@ $config = require(__DIR__ . '/config.php');
 // 实例支付对象
 $pay = new \Pay\Pay($config);
 
-// 支付宝转账参数
+// 订单退款参数
 $payOrder = [
-    'out_biz_no'      => '', // 订单号
-    'payee_type'      => 'ALIPAY_LOGONID', // 收款方账户类型(ALIPAY_LOGONID | ALIPAY_USERID)
-    'payee_account'   => 'demo@sandbox.com', // 收款方账户
-    'amount'          => '10', // 转账金额
-    'payer_show_name' => '未寒', // 付款方姓名
-    'payee_real_name' => '张三', // 收款方真实姓名
-    'remark'          => '张三', // 转账备注
+    'out_trade_no'  => '56737188841424', // 原商户订单号
+    'out_refund_no' => '567371888414240', // 退款订单号
+    'total_fee'     => '1',   // 原订单交易总金额
+    'refund_fee'    => '1',  // 申请退款金额
 ];
 
 try {
-    $options = $pay->driver('alipay')->gateway('transfer')->apply($payOrder);
+    $options = $pay->driver('wechat')->gateway('transfer')->refund($payOrder);
     var_dump($options);
 } catch (Exception $e) {
     echo "创建订单失败，" . $e->getMessage();
 }
-
