@@ -27,7 +27,6 @@ PHP聚合支付SDK（微信支付 + 支付宝支付）
 - PHP 5.3+
 - composer
 
-
 ## 配置参数
 ```php
 $config = [
@@ -60,7 +59,6 @@ $config = [
 `gateway()`： 确定支付网关。如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
 
 具体实现可以查看源代码。
-
 
 ### 1、支付宝
 
