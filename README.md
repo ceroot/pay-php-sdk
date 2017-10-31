@@ -1,7 +1,7 @@
 # pay-php-sdk
-*微信支付* + *支付宝支付*
+PHP聚合支付SDK（含微信 + 支付宝）
 
-<p align="center">
+<p>
 <a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/stable" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/downloads" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/unstable" alt="Latest Unstable Version"></a>
@@ -11,7 +11,8 @@
 欢迎 Star，欢迎 Fork！
 
 ## 特点
-- 隐藏开发者不需要关注的细节
+- 代码简洁，无需加载多余组件，可应用与任何平台或框架
+- 隐藏开发者不需要关注的细节，完全内部实现
 - 根据支付宝、微信最新 API 开发集成
 - 高度抽象的类，免去各种拼json与xml的痛苦
 - 符合 PSR 标准，你可以各种方便的与你的框架集成
@@ -31,7 +32,7 @@
 `driver()` ： 确定支付平台，如 `alipay`,`wechat`;  
 `gateway()`： 确定支付网关。如 `app`,`pos`,`scan`,`transfer`,`wap`,`...`
 
-详细思路可以查看源代码。
+具体实现可以查看源代码。
 
 ### 1、支付宝
 
