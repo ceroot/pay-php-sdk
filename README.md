@@ -1,12 +1,10 @@
 # pay-php-sdk
 PHP聚合支付SDK（微信支付 + 支付宝支付）
 
-<p>
-<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/stable" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/downloads" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/v/unstable" alt="Latest Unstable Version"></a>
-<a href="https://packagist.org/packages/zoujingli/pay-php-sdk"><img src="https://poser.pugx.org/zoujingli/pay-php-sdk/license" alt="License"></a>
-</p>
+[![Latest Stable Version](https://poser.pugx.org/zoujingli/pay-php-sdk/v/stable)](https://packagist.org/packages/zoujingli/pay-php-sdk)
+[![Total Downloads](https://poser.pugx.org/zoujingli/pay-php-sdk/downloads)](https://packagist.org/packages/zoujingli/pay-php-sdk)
+[![Latest Unstable Version](https://poser.pugx.org/zoujingli/pay-php-sdk/v/unstable)](https://packagist.org/packages/zoujingli/pay-php-sdk)
+[![License](https://poser.pugx.org/zoujingli/pay-php-sdk/license)](https://packagist.org/packages/zoujingli/pay-php-sdk)
 
 欢迎 Star，欢迎 Fork！
 
